@@ -1,3 +1,4 @@
+import 'package:chatapp/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/home_screen.dart';
@@ -15,17 +16,24 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Kurakani',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.blue,
-            titleTextStyle: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-                fontSize: 25),
-          )),
-      home: HomeScreen(),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        useMaterial3: true,
+        appBarTheme: AppBarTheme(
+          iconTheme:
+              IconThemeData(color: Colors.blue.shade700, fill: 0.5, shadows: [
+            Shadow(
+              blurRadius: 3,
+              color: Colors.blue.shade100,
+            )
+          ]),
+          backgroundColor: Colors.white,
+          titleTextStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+              fontSize: 25),
+        ),
+      ),
+      home: LoginScreen(),
     );
   }
 }
