@@ -1,6 +1,9 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:chatapp/helper/dialogs.dart';
 import 'package:chatapp/screens/home_screen.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -24,18 +27,30 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  Future<UserCredential> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future<bool> isConnected() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    return connectivityResult != ConnectivityResult.none;
+  }
 
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+  Future<UserCredential?> signInWithGoogle() async {
+    try {
+      await InternetAddress.lookup('google.com');
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      Dialogs.showSnackBar(
+          context, 'Something went Wrong.plzz check internet!');
+      return null;
+    }
   }
 
   @override
@@ -61,32 +76,36 @@ class _LoginScreenState extends State<LoginScreen> {
             bottom: 200,
             width: 300,
             child: ElevatedButton.icon(
-                onPressed: () async {
-                  await signInWithGoogle().then((user) {
-                    log('User:${user.user}');
-                    log('User:${user.additionalUserInfo}');
-
+              onPressed: () async {
+                bool iSConnected = await isConnected();
+                if (iSConnected) {
+                  signInWithGoogle().then((user) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: ((context) => HomeScreen())));
                   });
-                },
-                icon: Image.asset(
-                  'images/google.png',
-                  height: 20,
-                  width: 40,
+                } else {
+                  Dialogs.showSnackBar(context, "internet Connection");
+                }
+              },
+              icon: Image.asset(
+                'images/google.png',
+                height: 20,
+                width: 40,
+              ),
+              label: RichText(
+                text: TextSpan(
+                  style: TextStyle(color: Colors.blue.shade700, fontSize: 17),
+                  children: [
+                    TextSpan(text: " Login with "),
+                    TextSpan(
+                        text: "Google",
+                        style: TextStyle(fontWeight: FontWeight.bold))
+                  ],
                 ),
-                label: RichText(
-                    text: TextSpan(
-                        style: TextStyle(
-                            color: Colors.blue.shade700, fontSize: 17),
-                        children: [
-                      TextSpan(text: " Login with "),
-                      TextSpan(
-                          text: "Google",
-                          style: TextStyle(fontWeight: FontWeight.bold))
-                    ]))),
+              ),
+            ),
           ),
         ],
       ),
