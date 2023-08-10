@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Dialogs {
@@ -11,6 +12,17 @@ class Dialogs {
         backgroundColor: Colors.blue.shade700,
         behavior: SnackBarBehavior.floating,
         duration: Duration(seconds: 1),
+      ),
+    );
+  }
+
+  static void showProgressBar(BuildContext context) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => Center(
+        child: CircularProgressIndicator(
+          color: Colors.blue.shade700,
+        ),
       ),
     );
   }

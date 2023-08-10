@@ -75,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () async {
                 bool iSConnected = await isConnected();
                 if (iSConnected) {
+                  Dialogs.showProgressBar(context);
                   signInWithGoogle().then((user) {
                     Navigator.push(
                         context,
