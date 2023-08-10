@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:chatapp/helper/dialogs.dart';
 import 'package:chatapp/screens/home_screen.dart';
 import 'package:connectivity/connectivity.dart';
@@ -47,8 +45,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
-      Dialogs.showSnackBar(
-          context, 'Something went Wrong.plzz check internet!');
       return null;
     }
   }
@@ -86,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             builder: ((context) => HomeScreen())));
                   });
                 } else {
-                  Dialogs.showSnackBar(context, "internet Connection");
+                  Dialogs.showSnackBar(context, "Check Internet Connection !");
                 }
               },
               icon: Image.asset(
