@@ -1,4 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import 'auth/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,18 +17,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.house,
-        ),
-        title: Center(
-          child: Text(
-            "Kurakani",
-            style: TextStyle(color: Colors.blue.shade700),
-          ),
+        automaticallyImplyLeading: false,
+        title: Text(
+          "Kurakani",
+          style: TextStyle(color: Colors.blue.shade700),
         ),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_outlined))
+          IconButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut;
+                await GoogleSignIn().signOut();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: ((context) => LoginScreen())));
+              },
+              icon: Icon(Icons.logout_rounded))
         ],
       ),
       floatingActionButton: Padding(
