@@ -3,6 +3,8 @@ import 'package:chatapp/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../api/api.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -14,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 1), () {
-      if (FirebaseAuth.instance.currentUser != null) {
+      if (APIs.auth.currentUser != null) {
         Navigator.push(
             context, MaterialPageRoute(builder: ((context) => HomeScreen())));
       } else {

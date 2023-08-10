@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chatapp/widgets/chat_user_card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../api/api.dart';
 import 'auth/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded)),
           IconButton(
               onPressed: () async {
-                await FirebaseAuth.instance.signOut;
+                await APIs.auth.signOut;
                 await GoogleSignIn().signOut();
                 Navigator.push(context,
                     MaterialPageRoute(builder: ((context) => LoginScreen())));
@@ -44,6 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
           ),
         ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+            physics: BouncingScrollPhysics(),
+            itemCount: 16,
+            itemBuilder: ((context, index) {
+              return ChatUserCard();
+            })),
       ),
     );
   }
