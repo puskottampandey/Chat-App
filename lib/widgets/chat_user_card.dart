@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../models/chat_user.dart';
+
 class ChatUserCard extends StatefulWidget {
-  const ChatUserCard({super.key});
+  final ChatUser user;
+  const ChatUserCard({super.key, required this.user});
 
   @override
   State<ChatUserCard> createState() => _ChatUserCardState();
@@ -20,9 +23,9 @@ class _ChatUserCardState extends State<ChatUserCard> {
           leading: CircleAvatar(
             child: Icon(Icons.person),
           ),
-          title: Text("Puskottam "),
+          title: Text(widget.user.name.toString()),
           subtitle: Text(
-            "seen gara",
+            widget.user.about.toString(),
             maxLines: 1,
           ),
           trailing: Text(
