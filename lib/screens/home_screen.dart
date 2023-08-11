@@ -58,15 +58,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
             } else
               Center(child: CircularProgressIndicator());
-
-            return ListView.builder(
-                physics: BouncingScrollPhysics(),
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-                  return ChatUserCard(
-                    user: list[index],
-                  );
-                });
+            if (list.isNotEmpty) {
+              return ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    return ChatUserCard(
+                      user: list[index],
+                    );
+                  });
+            } else {
+              return Center(
+                  child: Text(
+                "NO Connection Found !",
+                style: TextStyle(fontSize: 20),
+              ));
+            }
           }),
         ),
       ),

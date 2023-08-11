@@ -21,7 +21,10 @@ class _ChatUserCardState extends State<ChatUserCard> {
         onTap: () {},
         child: ListTile(
           leading: CircleAvatar(
-            child: Icon(Icons.person),
+            child: Image.network(
+              widget.user.image.toString(),
+              fit: BoxFit.cover,
+            ),
           ),
           title: Text(widget.user.name.toString()),
           subtitle: Text(
