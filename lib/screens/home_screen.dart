@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: StreamBuilder(
-          stream: APIs.firestore.collection('Users').snapshots(),
+          stream: APIs.firestore.collection("Users").snapshots(),
           builder: ((context, snapshot) {
             if (snapshot.hasData) {
               final data = snapshot.data?.docs;

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:chatapp/helper/dialogs.dart';
+import 'package:chatapp/models/chat_user.dart';
 import 'package:chatapp/screens/home_screen.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,11 +79,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 bool iSConnected = await isConnected();
                 if (iSConnected) {
                   Dialogs.showProgressBar(context);
-                  signInWithGoogle().then((user) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => HomeScreen())));
+                  signInWithGoogle().then((user) async {
+                    if (user != null) {
+                      if (await APIs.userExists()) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => HomeScreen())));
+                      } else {
+                        APIs.userCreate().then((value) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => HomeScreen())));
+                        });
+                      }
+                    }
                   });
                 } else {
                   Dialogs.showSnackBar(context, "Check Internet Connection !");
