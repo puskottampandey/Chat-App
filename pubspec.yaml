@@ -40,6 +40,7 @@ dependencies:
   google_sign_in: any
   connectivity: any
   cloud_firestore: any
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:

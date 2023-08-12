@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:chatapp/helper/dialogs.dart';
-import 'package:chatapp/models/chat_user.dart';
+
 import 'package:chatapp/screens/home_screen.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -22,7 +22,8 @@ class APIs {
       name: user.displayName.toString(),
       about: "hey i my name is puskottam pandey",
       email: "puskottam@gmail.com",
-      image: user.photoURL.toString(),
+      image:
+          "https://imgs.search.brave.com/w_9euVJ_7WSUD9opXg8rB8JcdYopdzf8v862OxpW0fI/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudW5zcGxhc2gu/Y29tL3Bob3RvLTE0/OTI2ODEyOTAwODIt/ZTkzMjgzMjk0MWU2/P2l4bGliPXJiLTQu/MC4zJml4aWQ9TTN3/eE1qQTNmREI4TUh4/elpXRnlZMmg4TVRK/OGZIQmxjbk52Ym54/bGJud3dmSHd3Zkh4/OE1BPT0mdz0xMDAw/JnE9ODA.jpeg",
       createdAt: time,
       isOnline: time,
       lastActive: time,
