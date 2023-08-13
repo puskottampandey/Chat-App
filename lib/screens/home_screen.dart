@@ -1,3 +1,4 @@
+import 'package:chatapp/screens/profile_screen.dart';
 import 'package:chatapp/widgets/chat_user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -25,6 +26,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => ProfileScreen(
+                              user: list[0],
+                            ))));
+              },
+              icon: Icon(Icons.more_vert)),
           IconButton(
               onPressed: () async {
                 await APIs.auth.signOut;
