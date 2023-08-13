@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../models/chat_user.dart';
@@ -20,12 +21,12 @@ class _ChatUserCardState extends State<ChatUserCard> {
       child: InkWell(
         onTap: () {},
         child: ListTile(
-          leading: Container(
-            height: 50,
-            width: 40,
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.network(widget.user.image.toString())),
+          leading: CachedNetworkImage(
+            imageUrl: widget.user.image.toString(),
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => CircleAvatar(
+              child: Icon(Icons.person),
+            ),
           ),
           title: Text(widget.user.name.toString()),
           subtitle: Text(

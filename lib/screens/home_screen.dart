@@ -1,5 +1,4 @@
 import 'package:chatapp/widgets/chat_user_card.dart';
-
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../api/api.dart';
