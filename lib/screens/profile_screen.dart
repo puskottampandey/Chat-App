@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatapp/helper/dialogs.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chatapp/models/chat_user.dart';
@@ -30,10 +31,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: FloatingActionButton.extended(
           backgroundColor: Colors.red,
           onPressed: () async {
-            await APIs.auth.signOut;
-            await GoogleSignIn().signOut();
-            Navigator.push(context,
-                MaterialPageRoute(builder: ((context) => LoginScreen())));
+            // for showing progress dialog
+            Dialogs.showProgressBar(context);
+            //for sign out app
+            await APIs.auth.signOut().then((value) async {
+              await GoogleSignIn().signOut().then((value) => {
+                    //for moving to home screen
+                    Navigator.pop(context),
+                    //for replacing the home screen with login screen
+                    Navigator.pop(context),
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => LoginScreen())))
+                  });
+            });
           },
           icon: Icon(
             Icons.logout_outlined,
@@ -50,19 +62,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           children: [
             Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: CachedNetworkImage(
-                  width: 120,
-                  height: 120,
-                  imageUrl: widget.user.image.toString(),
-                  placeholder: (context, url) => Center(
-                    child: CircularProgressIndicator(),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    child: CachedNetworkImage(
+                      width: 150,
+                      height: 140,
+                      imageUrl: widget.user.image.toString(),
+                      placeholder: (context, url) => Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => CircleAvatar(
+                        child: Icon(Icons.person),
+                      ),
+                    ),
                   ),
-                  errorWidget: (context, url, error) => CircleAvatar(
-                    child: Icon(Icons.person),
-                  ),
-                ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: MaterialButton(
+                      elevation: 1,
+                      onPressed: () {},
+                      shape: CircleBorder(),
+                      color: Colors.white,
+                      child: Icon(
+                        Icons.edit,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             SizedBox(

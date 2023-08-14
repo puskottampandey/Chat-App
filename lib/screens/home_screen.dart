@@ -36,14 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ))));
               },
               icon: Icon(Icons.more_vert)),
-          IconButton(
-              onPressed: () async {
-                await APIs.auth.signOut;
-                await GoogleSignIn().signOut();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => LoginScreen())));
-              },
-              icon: Icon(Icons.logout_rounded))
         ],
       ),
       floatingActionButton: Padding(
