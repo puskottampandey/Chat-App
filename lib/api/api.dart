@@ -7,10 +7,25 @@ class APIs {
   static FirebaseAuth auth = FirebaseAuth.instance;
   // for accessing cloud firestore database
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // for storing the self information\
+  static late ChatUser me;
+  //for  return current user
   static User get user => auth.currentUser!;
 // for checking if user exists or not?
   static Future<bool> userExists() async {
     return (await firestore.collection('Users').doc(user.uid).get()).exists;
+  }
+
+//for getting current user info
+  static Future<void> getSelfInfo() async {
+    await firestore.collection('Users').doc(user.uid).get().then((user) async {
+      if (user.exists) {
+        me = ChatUser.fromJson(user.data()!);
+      } else {
+        await userCreate().then((value) => getSelfInfo());
+      }
+    });
   }
 
   //for creating the user
@@ -33,5 +48,13 @@ class APIs {
         .collection('Users')
         .doc(user.uid)
         .set(Chatuser.toJson());
+  }
+
+//getting all users from firestore database
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser() {
+    return firestore
+        .collection('Users')
+        .where('id', isNotEqualTo: user.uid)
+        .snapshots();
   }
 }

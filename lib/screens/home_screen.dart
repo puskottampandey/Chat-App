@@ -16,6 +16,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<ChatUser> list = [];
   @override
+  void initState() {
+    super.initState();
+    APIs.getSelfInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -25,14 +31,16 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(color: Colors.blue.shade700),
         ),
         actions: [
+          // search user button
           IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded)),
+          // more feautures button
           IconButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: ((context) => ProfileScreen(
-                              user: list[0],
+                              user: APIs.me,
                             ))));
               },
               icon: Icon(Icons.more_vert)),
@@ -52,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: StreamBuilder(
-          stream: APIs.firestore.collection("Users").snapshots(),
+          stream: APIs.getAllUser(),
           builder: ((context, snapshot) {
             if (snapshot.hasData) {
               final data = snapshot.data?.docs;
