@@ -57,4 +57,12 @@ class APIs {
         .where('id', isNotEqualTo: user.uid)
         .snapshots();
   }
+
+  // for updating the user information
+  static Future<void> updateUserInfo() async {
+    return (await firestore.collection('Users').doc(user.uid).update({
+      'name': me.name,
+      'about': me.about,
+    }));
+  }
 }

@@ -17,11 +17,13 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      // for hiding the keyword
+      // for hiding
+      // keyword
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -60,85 +62,101 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
+        body: Form(
+          key: formKey,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Center(
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        child: CachedNetworkImage(
-                          width: 150,
-                          height: 140,
-                          imageUrl: widget.user.image.toString(),
-                          placeholder: (context, url) => Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          errorWidget: (context, url, error) => CircleAvatar(
-                            child: Icon(Icons.person),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: MaterialButton(
-                          elevation: 1,
-                          onPressed: () {},
-                          shape: CircleBorder(),
-                          color: Colors.white,
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.blue,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Center(
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          child: CachedNetworkImage(
+                            width: 150,
+                            height: 140,
+                            imageUrl: widget.user.image.toString(),
+                            placeholder: (context, url) => Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) => CircleAvatar(
+                              child: Icon(Icons.person),
+                            ),
                           ),
                         ),
-                      )
-                    ],
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: MaterialButton(
+                            elevation: 1,
+                            onPressed: () {},
+                            shape: CircleBorder(),
+                            color: Colors.white,
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  widget.user.email.toString(),
-                  style: TextStyle(color: Colors.blue.shade700),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    initialValue: widget.user.name,
-                    decoration: InputDecoration(
-                        label: Text("Name"),
-                        hintText: "eg.Puskottam Pandey",
-                        prefixIcon: Icon(Icons.person),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20))),
+                  SizedBox(
+                    height: 5,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    initialValue: widget.user.about,
-                    decoration: InputDecoration(
-                        label: Text("About"),
-                        hintText: "eg.feeling happy",
-                        prefixIcon: Icon(Icons.info_outline),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20))),
+                  Text(
+                    widget.user.email.toString(),
+                    style: TextStyle(color: Colors.blue.shade700),
                   ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                        shape: StadiumBorder(), minimumSize: Size(50, 40)),
-                    onPressed: () {},
-                    icon: Icon(Icons.edit),
-                    label: Text("Update"))
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      onSaved: (val) => APIs.me.name = val ?? '',
+                      validator: (val) =>
+                          val != null && val.isNotEmpty ? null : "Required",
+                      initialValue: widget.user.name,
+                      decoration: InputDecoration(
+                          label: Text("Name"),
+                          hintText: "eg.Puskottam Pandey",
+                          prefixIcon: Icon(Icons.person),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      onSaved: (val) => APIs.me.about = val ?? '',
+                      validator: (val) =>
+                          val != null && val.isNotEmpty ? null : 'Required',
+                      initialValue: widget.user.about,
+                      decoration: InputDecoration(
+                          label: Text("About"),
+                          hintText: "eg.feeling happy",
+                          prefixIcon: Icon(Icons.info_outline),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          shape: StadiumBorder(), minimumSize: Size(50, 40)),
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          formKey.currentState!.save();
+                          APIs.updateUserInfo();
+                          Dialogs.showSnackBar(
+                              context, "Profile Updated Successfully");
+                        }
+                      },
+                      icon: Icon(Icons.edit),
+                      label: Text("Update"))
+                ],
+              ),
             ),
           ),
         ),
