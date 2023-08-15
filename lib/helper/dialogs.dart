@@ -26,4 +26,29 @@ class Dialogs {
       ),
     );
   }
+
+  static void showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: (context),
+        builder: (context) {
+          return Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Image.asset(
+                  'images/picture.png',
+                  height: 150,
+                  width: 100,
+                ),
+                Container(
+                    child: Image.asset(
+                  'images/camera.png',
+                  height: 150,
+                  width: 100,
+                )),
+              ],
+            ),
+          );
+        });
+  }
 }

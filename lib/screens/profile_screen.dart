@@ -90,7 +90,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           right: 0,
                           child: MaterialButton(
                             elevation: 1,
-                            onPressed: () {},
+                            onPressed: () {
+                              Dialogs.showBottomSheet(context);
+                            },
                             shape: CircleBorder(),
                             color: Colors.white,
                             child: Icon(
