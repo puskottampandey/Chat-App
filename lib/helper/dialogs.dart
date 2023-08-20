@@ -32,20 +32,36 @@ class Dialogs {
         context: (context),
         builder: (context) {
           return Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: ListView(
+              padding: EdgeInsets.only(top: 20, bottom: 10),
+              shrinkWrap: true,
               children: [
-                Image.asset(
-                  'images/picture.png',
-                  height: 150,
-                  width: 100,
-                ),
-                Container(
-                    child: Image.asset(
-                  'images/camera.png',
-                  height: 150,
-                  width: 100,
+                Center(
+                    child: Text(
+                  "Pick Profile Picture",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: () {},
+                      child: Image.asset(
+                        'images/picture.png',
+                        height: 140,
+                        width: 100,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: Image.asset(
+                        'images/camera.png',
+                        height: 150,
+                        width: 100,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           );
