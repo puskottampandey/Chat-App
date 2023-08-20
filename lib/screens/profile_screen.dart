@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/helper/dialogs.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chatapp/models/chat_user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../api/api.dart';
 import 'auth/login_screen.dart';
@@ -18,6 +21,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final formKey = GlobalKey<FormState>();
+  String? _image;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -72,26 +76,112 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Center(
                     child: Stack(
                       children: [
-                        ClipRRect(
-                          child: CachedNetworkImage(
-                            width: 150,
-                            height: 140,
-                            imageUrl: widget.user.image.toString(),
-                            placeholder: (context, url) => Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            errorWidget: (context, url, error) => CircleAvatar(
-                              child: Icon(Icons.person),
-                            ),
-                          ),
-                        ),
+                        // profile picture
+                        _image != null
+                            ?
+                            //local image
+                            ClipRRect(
+                                child: Image.file(
+                                  File(_image!),
+                                  width: 150,
+                                  height: 140,
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                            :
+                            // image from server
+                            ClipRRect(
+                                child: CachedNetworkImage(
+                                  width: 150,
+                                  height: 140,
+                                  imageUrl: widget.user.image.toString(),
+                                  placeholder: (context, url) => Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      CircleAvatar(
+                                    child: Icon(Icons.person),
+                                  ),
+                                ),
+                              ),
                         Positioned(
                           bottom: 0,
                           right: 0,
                           child: MaterialButton(
                             elevation: 1,
                             onPressed: () {
-                              Dialogs.showBottomSheet(context);
+                              showModalBottomSheet(
+                                  context: (context),
+                                  builder: (context) {
+                                    return Container(
+                                      child: ListView(
+                                        padding: EdgeInsets.only(
+                                            top: 20, bottom: 10),
+                                        shrinkWrap: true,
+                                        children: [
+                                          Center(
+                                              child: Text(
+                                            "Pick Profile Picture",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                          )),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              InkWell(
+                                                onTap: () async {
+                                                  final ImagePicker picker =
+                                                      ImagePicker();
+                                                  final XFile? image =
+                                                      await picker.pickImage(
+                                                          source: ImageSource
+                                                              .gallery);
+                                                  if (image != null) {
+                                                    image.path;
+                                                    image.mimeType;
+                                                    setState(() {
+                                                      _image = image.path;
+                                                    });
+                                                    //hiding the bottom sheet
+                                                    Navigator.pop(context);
+                                                  }
+                                                },
+                                                child: Image.asset(
+                                                  'images/picture.png',
+                                                  height: 140,
+                                                  width: 100,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () async {
+                                                  final ImagePicker picker =
+                                                      ImagePicker();
+                                                  final XFile? image =
+                                                      await picker.pickImage(
+                                                          source: ImageSource
+                                                              .camera);
+                                                  if (image != null) {
+                                                    image.path;
+                                                    setState(() {
+                                                      _image = image.path;
+                                                      Navigator.pop(context);
+                                                    });
+                                                  }
+                                                },
+                                                child: Image.asset(
+                                                  'images/camera.png',
+                                                  height: 150,
+                                                  width: 100,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  });
                             },
                             shape: CircleBorder(),
                             color: Colors.white,
