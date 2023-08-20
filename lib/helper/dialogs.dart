@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Dialogs {
   static void showSnackBar(BuildContext context, String msg) {
@@ -45,7 +48,14 @@ class Dialogs {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        final ImagePicker picker = ImagePicker();
+                        final XFile? image =
+                            await picker.pickImage(source: ImageSource.gallery);
+                        if (image != null) {
+                          String imagePath = image.path;
+                        }
+                      },
                       child: Image.asset(
                         'images/picture.png',
                         height: 140,
@@ -53,7 +63,14 @@ class Dialogs {
                       ),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        final ImagePicker picker = ImagePicker();
+                        final XFile? image =
+                            await picker.pickImage(source: ImageSource.camera);
+                        if (image != null) {
+                          String imagePath = image.path;
+                        }
+                      },
                       child: Image.asset(
                         'images/camera.png',
                         height: 150,
