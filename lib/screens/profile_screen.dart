@@ -104,6 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                               ),
+
                         Positioned(
                           bottom: 0,
                           right: 0,
@@ -137,13 +138,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   final XFile? image =
                                                       await picker.pickImage(
                                                           source: ImageSource
-                                                              .gallery);
+                                                              .gallery,
+                                                          imageQuality: 80);
                                                   if (image != null) {
                                                     image.path;
                                                     image.mimeType;
                                                     setState(() {
                                                       _image = image.path;
                                                     });
+                                                    //  for updating the profile in  the firebase
+                                                    APIs.updateProfilePicture(
+                                                        File(_image!));
                                                     //hiding the bottom sheet
                                                     Navigator.pop(context);
                                                   }
@@ -166,6 +171,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     image.path;
                                                     setState(() {
                                                       _image = image.path;
+                                                      APIs.updateProfilePicture(
+                                                          File(_image!));
                                                       Navigator.pop(context);
                                                     });
                                                   }

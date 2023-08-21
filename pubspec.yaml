@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: any
   cached_network_image: any
   image_picker: any
+  firebase_storage: any
 
 dev_dependencies:
   flutter_test:
