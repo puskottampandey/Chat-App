@@ -83,7 +83,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   Expanded(
                     child: TextField(
-                      maxLines: 1,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
                       decoration: InputDecoration(
                           hintText: 'Type Something...',
                           hintStyle: TextStyle(color: Colors.blue.shade700),
@@ -133,6 +134,38 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
+          Expanded(
+            child: StreamBuilder(
+              // stream: APIs.getAllUser(),
+              builder: ((context, snapshot) {
+                //  final data = snapshot.data?.docs;
+                //  list =
+                //    data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
+                //       [];
+                // } else
+                Center(child: CircularProgressIndicator());
+                final _list = [];
+
+                if (_list.isNotEmpty) {
+                  return ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: _list.length,
+                      itemBuilder: (context, index) {
+                        return Text(" ${_list[index]}");
+
+                        // ChatUserCard(
+                        //    user: isSearching ? _searchlist[index] : list[index],
+                      });
+                } else {
+                  return Center(
+                      child: Text(
+                    "Say Hi! 👋",
+                    style: TextStyle(fontSize: 20),
+                  ));
+                }
+              }),
+            ),
+          ),
           _chatinput(),
         ],
       ),
