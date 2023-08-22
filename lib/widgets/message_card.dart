@@ -59,14 +59,23 @@ class _MessageCardState extends State<MessageCard> {
   //our messaages
   Widget greenMessages() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      //message content
+      Row(
+        children: [
+          //double tick blue icon fo message read
+          SizedBox(
+            width: 8,
+          ),
 
-      Padding(
-        padding: const EdgeInsets.only(left: 9),
-        child: Text(
-          widget.messages.sent!,
-        ),
+          Icon(Icons.done_all_outlined, color: Colors.blueAccent, size: 20),
+          // for adding some space
+          //read time
+          Text(
+            '${widget.messages.read!}12:00AM',
+            style: TextStyle(color: Colors.black87),
+          ),
+        ],
       ),
+      //message content
       Flexible(
         child: Container(
           margin: EdgeInsets.symmetric(

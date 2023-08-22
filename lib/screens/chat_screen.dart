@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/models/chat_user.dart';
 import 'package:chatapp/widgets/message_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
@@ -15,6 +16,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final TextEditingController controller = TextEditingController();
   List<Messages> _list = [];
   // custom appbar
   Widget _appbar() {
@@ -88,6 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: controller,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       decoration: InputDecoration(
@@ -116,7 +119,12 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           // sent button
           MaterialButton(
-              onPressed: () {},
+              onPressed: () {
+                if (controller.text.isNotEmpty) {
+                  APIs.sendMessage(widget.user, controller.text);
+                  controller.text = "";
+                }
+              },
               minWidth: 0,
               padding: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 5),
               shape: CircleBorder(),
@@ -137,18 +145,20 @@ class _ChatScreenState extends State<ChatScreen> {
         automaticallyImplyLeading: false,
         flexibleSpace: _appbar(),
       ),
+      backgroundColor: Color.fromARGB(255, 234, 248, 255),
       body: Column(
         children: [
           Expanded(
             child: StreamBuilder(
-              stream: APIs.getAllMessages(),
+              stream: APIs.getAllMessages(widget.user),
               builder: ((context, snapshot) {
                 final data = snapshot.data?.docs;
-                // list =
-                //  data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
-                //   [];
-                //  } else
-                Center(child: CircularProgressIndicator());
+                if (snapshot.hasData) {
+                  _list =
+                      data?.map((e) => Messages.fromJson(e.data())).toList() ??
+                          [];
+                } else
+                  Center(child: CircularProgressIndicator());
                 _list.clear();
                 _list.add(
                   Messages(
