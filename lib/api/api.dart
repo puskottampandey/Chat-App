@@ -92,5 +92,11 @@ class APIs {
     });
   }
 
-  // for downloading the profile picture
+// getting all messages of a specfic conversion from firesotore database
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages() {
+    return firestore
+        .collection('messages')
+        .where('id', isNotEqualTo: user.uid)
+        .snapshots();
+  }
 }

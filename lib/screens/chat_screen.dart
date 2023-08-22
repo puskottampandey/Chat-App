@@ -1,6 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/models/chat_user.dart';
+import 'package:chatapp/widgets/message_card.dart';
 import 'package:flutter/material.dart';
+
+import '../api/api.dart';
+import '../models/messages.dart';
 
 class ChatScreen extends StatefulWidget {
   final ChatUser user;
@@ -11,6 +15,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  List<Messages> _list = [];
   // custom appbar
   Widget _appbar() {
     return SafeArea(
@@ -136,22 +141,40 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: StreamBuilder(
-              // stream: APIs.getAllUser(),
+              stream: APIs.getAllMessages(),
               builder: ((context, snapshot) {
-                //  final data = snapshot.data?.docs;
-                //  list =
-                //    data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
-                //       [];
-                // } else
+                final data = snapshot.data?.docs;
+                // list =
+                //  data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
+                //   [];
+                //  } else
                 Center(child: CircularProgressIndicator());
-                final _list = [];
+                _list.clear();
+                _list.add(
+                  Messages(
+                      told: 'xyz',
+                      msg: 'hiii',
+                      read: "",
+                      type: Type.text,
+                      fromId: APIs.user.uid,
+                      sent: "12:00Pm"),
+                );
+                _list.add(
+                  Messages(
+                      told: APIs.user.uid,
+                      msg: 'helloo',
+                      read: "",
+                      type: Type.text,
+                      fromId: "xyz",
+                      sent: "12:00AM"),
+                );
 
                 if (_list.isNotEmpty) {
                   return ListView.builder(
                       physics: BouncingScrollPhysics(),
                       itemCount: _list.length,
                       itemBuilder: (context, index) {
-                        return Text(" ${_list[index]}");
+                        return MessageCard(messages: _list[index]);
 
                         // ChatUserCard(
                         //    user: isSearching ? _searchlist[index] : list[index],
